@@ -76,6 +76,7 @@ void tipc_server_destroy(struct tipc_sock *m)
 struct tipc_sock *tipc_client_create(struct tipc_conf *conf)
 {
 	struct tipc_sock *m;
+	int tipc_importance = TIPC_CRITICAL_IMPORTANCE;
 	// int val = 0;
 
 	m = (struct tipc_sock *) malloc(sizeof(struct tipc_sock));
@@ -94,6 +95,8 @@ struct tipc_sock *tipc_client_create(struct tipc_conf *conf)
 		free(m);
 		return NULL;
 	}
+
+	setsockopt(m->fd, SOL_TIPC, TIPC_IMPORTANCE,  &tipc_importance, sizeof(tipc_importance));
 	
 	/* setsockopt(m->fd, SOL_TIPC, TIPC_DEST_DROPPABLE, &val, sizeof(val));
 	   fcntl(m->fd, F_SETFL, O_NONBLOCK); */ // used for debug purposes
